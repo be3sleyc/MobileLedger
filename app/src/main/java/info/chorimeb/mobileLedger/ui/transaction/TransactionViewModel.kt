@@ -5,8 +5,8 @@ import info.chorimeb.mobileLedger.data.repositories.TransactionRepository
 import info.chorimeb.mobileLedger.data.repositories.UserRepository
 
 class TransactionViewModel(
-    userRepository: UserRepository,
-    repository: TransactionRepository
+    private val userRepository: UserRepository,
+    private val repository: TransactionRepository
 ) : ViewModel() {
     // TODO: Implement the ViewModel
 }

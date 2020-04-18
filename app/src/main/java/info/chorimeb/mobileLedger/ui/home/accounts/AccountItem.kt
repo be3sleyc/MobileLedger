@@ -10,16 +10,6 @@ class AccountItem(val account: Account) : BindableItem<RecyclerItemAccountBindin
 
     override fun bind(viewBinding: RecyclerItemAccountBinding, position: Int) {
         viewBinding.account = account
-        if (account.type == "cash") {
-            viewBinding.accountTypeIcon.setImageResource(R.drawable.ic_cash)
-        } else if (account.type == "debit") {
-            viewBinding.accountTypeIcon.setImageResource(R.drawable.ic_credit)
-        } else if (account.type == "credit") {
-            viewBinding.accountTypeIcon.setImageResource(R.drawable.ic_credit)
-        } else if (account.type == "load") {
-            viewBinding.accountTypeIcon.setImageResource(R.drawable.ic_lend)
-        }
-
-
+        viewBinding.accountTypeIcon.setImageResource(account.getTypeIcon())
     }
 }

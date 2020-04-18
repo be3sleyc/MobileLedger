@@ -13,7 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.account.OldAccountFragment">
+        tools:context=".ui.account.EditAccountFragment">
 
         <EditText
             android:id="@+id/oldAccountName"
@@ -27,16 +27,13 @@
             android:layout_centerHorizontal="true"
             android:layout_margin="@dimen/form_margin_title"/>
 
-        <EditText
+        <TextView
             android:id="@+id/oldAccountBalance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/oldAccountName"
             android:ems="10"
             android:text="@{account.balanceString}"
-            android:hint="@string/hint_balance_amount"
-            android:inputType="numberDecimal"
-            android:importantForAutofill="no"
             android:layout_margin="@dimen/form_margin_body"/>
 
         <Spinner

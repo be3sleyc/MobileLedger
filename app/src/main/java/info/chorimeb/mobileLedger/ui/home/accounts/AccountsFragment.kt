@@ -50,8 +50,8 @@ class AccountsFragment : Fragment(), AuthListener, KodeinAware {
         return inflater.inflate(R.layout.fragment_accounts, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this, factory).get(AccountsViewModel::class.java)
         viewModel.authListener = this
@@ -81,8 +81,8 @@ class AccountsFragment : Fragment(), AuthListener, KodeinAware {
                 fabaddtransaction.startAnimation(fabClose)
                 floatingActionButton.startAnimation(fabRotCW)
                 val intent = Intent(this.context, TransactionActivity::class.java)
+                intent.putExtra("TYPE", "new")
                 startActivity(intent)
-                Toast.makeText(this.context, "Add Transaction Activity", Toast.LENGTH_SHORT).show()
             }
 
             fabaddaccount.setOnClickListener {
@@ -90,8 +90,8 @@ class AccountsFragment : Fragment(), AuthListener, KodeinAware {
                 fabaddtransaction.startAnimation(fabClose)
                 floatingActionButton.startAnimation(fabRotCW)
                 val intent = Intent(this.context, AccountActivity::class.java)
+                intent.putExtra("TYPE", "new")
                 startActivity(intent)
-                Toast.makeText(this.context, "Add Account Activity", Toast.LENGTH_SHORT).show()
             }
         }
 

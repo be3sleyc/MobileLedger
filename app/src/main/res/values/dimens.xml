@@ -8,5 +8,5 @@
     <dimen name="elevate">6dp</dimen>
     <dimen name="cardview_elevation">2dp</dimen>
     <dimen name="button_margin">82dp</dimen>
-    <dimen name="button_side_margin">52</dimen>
+    <dimen name="button_side_margin">52dp</dimen>
 </resources>

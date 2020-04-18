@@ -2,28 +2,39 @@ package info.chorimeb.mobileLedger.ui.account
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.navigation.Navigation
+import androidx.fragment.app.FragmentContainerView
 import info.chorimeb.mobileLedger.R
-import info.chorimeb.mobileLedger.data.db.entities.Account
 import kotlinx.android.synthetic.main.activity_account.*
 
 class AccountActivity : AppCompatActivity() {
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
 
         setSupportActionBar(accountToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val navController = Navigation.findNavController(this, R.id.accountFragment)
+        if (findViewById<FragmentContainerView>(R.id.accountFragmentContainer) != null) {
 
-        supportActionBar?.title = "Edit Account"
-        if (intent.getStringExtra("TYPE") == "old") {
-            val account = intent.getParcelableExtra<Account>("ACCOUNT")
+            if (savedInstanceState != null) {
+                return
+            }
 
-        } else {
-            supportActionBar?.title = "New Account"
+            if (intent.getStringExtra("TYPE") == "old") {
+                supportActionBar?.title = "Edit Account"
+                // inflate edit account frag with intent extras
+                val editAccount = EditAccountFragment()
+                editAccount.arguments = intent.extras
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.accountFragmentContainer, editAccount).commit()
+            } else {
+                supportActionBar?.title = "New Account"
+                // inflate new account fragment
+                val newAccount = NewAccountFragment()
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.accountFragmentContainer, newAccount).commit()
+            }
         }
     }
 }

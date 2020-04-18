@@ -27,7 +27,6 @@
                 android:layout_marginEnd="@dimen/cardview_horizontal_margin"
                 android:contentDescription="@{account.type}"
                 android:scaleType="fitXY"
-                android:src="@{account.typeIcon}"
                 tools:src="@tools:sample/avatars" />
 
             <TextView

@@ -50,8 +50,8 @@ class TransactionsFragment : Fragment(), AuthListener, KodeinAware {
         return inflater.inflate(R.layout.fragment_transactions, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this, factory).get(TransactionsViewModel::class.java)
         viewModel.authListener = this
 
@@ -76,15 +76,21 @@ class TransactionsFragment : Fragment(), AuthListener, KodeinAware {
             }
 
             fabaddtransaction.setOnClickListener {
+                fabaddaccount.startAnimation(fabClose)
+                fabaddtransaction.startAnimation(fabClose)
+                floatingActionButton.startAnimation(fabRotCW)
                 val intent = Intent(this.context, TransactionActivity::class.java)
+                intent.putExtra("TYPE", "new")
                 startActivity(intent)
-                Toast.makeText(this.context, "Add Transaction Activity", Toast.LENGTH_SHORT).show()
             }
 
             fabaddaccount.setOnClickListener {
+                fabaddaccount.startAnimation(fabClose)
+                fabaddtransaction.startAnimation(fabClose)
+                floatingActionButton.startAnimation(fabRotCW)
                 val intent = Intent(this.context, AccountActivity::class.java)
+                intent.putExtra("TYPE", "new")
                 startActivity(intent)
-                Toast.makeText(this.context, "Add Account Activity", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -129,7 +135,11 @@ class TransactionsFragment : Fragment(), AuthListener, KodeinAware {
     }
 
     private val onItemClick = OnItemClickListener { item, _ ->
-        Toast.makeText(this.context, item.toString(), Toast.LENGTH_LONG).show()
+        val transactionItem = item as TransactionItem
+        val intent = Intent(this.context, TransactionActivity::class.java)
+        intent.putExtra("TYPE", "old")
+        intent.putExtra("TRANSACTION", transactionItem.transaction)
+        startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

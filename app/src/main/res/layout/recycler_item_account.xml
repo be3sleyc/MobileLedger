@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="account"
+            type="info.chorimeb.mobileLedger.data.db.entities.Account" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/cardview_elevation">
+
+        <RelativeLayout
+            android:id="@+id/accountRecycleItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/accountTypeIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="@dimen/cardview_horizontal_margin"
+                android:layout_marginEnd="@dimen/cardview_horizontal_margin"
+                android:contentDescription="@{account.type}"
+                android:scaleType="fitXY"
+                android:src="@{account.typeIcon}"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/accountNameString"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/accountTypeIcon"
+                android:layout_toStartOf="@id/accountBalanceString"
+                android:layout_toEndOf="@id/accountTypeIcon"
+                android:text="@{account.name}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="@tools:sample/lorem"/>
+
+            <TextView
+                android:id="@+id/accountBalanceString"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/cardview_horizontal_margin"
+                android:text="@{account.balanceString}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="@tools:sample/us_zipcodes"/>
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <data>
+
+        <variable
+            name="account"
+            type="info.chorimeb.mobileLedger.data.db.entities.Account" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.account.OldAccountFragment">
+
+        <EditText
+            android:id="@+id/oldAccountName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:text="@{account.name}"
+            android:hint="@string/hint_account_name"
+            android:inputType="textPersonName"
+            android:importantForAutofill="no"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/form_margin_title"/>
+
+        <EditText
+            android:id="@+id/oldAccountBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/oldAccountName"
+            android:ems="10"
+            android:text="@{account.balanceString}"
+            android:hint="@string/hint_balance_amount"
+            android:inputType="numberDecimal"
+            android:importantForAutofill="no"
+            android:layout_margin="@dimen/form_margin_body"/>
+
+        <Spinner
+            android:id="@+id/oldAccountTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/oldAccountBalance"
+            android:layout_margin="@dimen/form_margin_body"/>
+
+        <EditText
+            android:id="@+id/oldAccountNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/oldAccountTypeSpinner"
+            android:ems="10"
+            android:text="@{account.notes}"
+            android:hint="@string/hint_account_notes"
+            android:inputType="textMultiLine"
+            android:importantForAutofill="no"
+            android:layout_margin="@dimen/form_margin_body"/>
+
+        <Button
+            android:id="@+id/btnOldAccountSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/button_margin"
+            android:layout_marginEnd="@dimen/button_side_margin"
+            android:text="@string/btn_save" />
+
+    </RelativeLayout>
+</layout>

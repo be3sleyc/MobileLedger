@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="transaction"
+            type="info.chorimeb.mobileLedger.data.db.entities.Transaction" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.transaction.OldTransactionFragment">
+
+        <Spinner
+            android:id="@+id/oldAccountNameSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/form_margin_title" />
+
+        <EditText
+            android:id="@+id/oldTransactionDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/oldAccountNameSpinner"
+            android:layout_margin="@dimen/form_margin_body"
+            android:ems="10"
+            android:hint="@string/hint_datetime"
+            android:importantForAutofill="no"
+            android:inputType="datetime"
+            android:text="@{transaction.paiddate}" />
+
+        <EditText
+            android:id="@+id/oldTransactionPayee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/oldTransactionDate"
+            android:layout_margin="@dimen/form_margin_body"
+            android:ems="10"
+            android:hint="@string/hint_payee"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:text="@{transaction.payee}" />
+
+        <EditText
+            android:id="@+id/oldTransactionDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/oldTransactionPayee"
+            android:layout_margin="@dimen/form_margin_body"
+            android:ems="10"
+            android:hint="@string/hint_description"
+            android:importantForAutofill="no"
+            android:inputType="textShortMessage"
+            android:text="@{transaction.description}" />
+
+        <EditText
+            android:id="@+id/oldTransactionAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/oldTransactionDesc"
+            android:layout_margin="@dimen/form_margin_body"
+            android:ems="10"
+            android:hint="@string/hint_balance_amount"
+            android:importantForAutofill="no"
+            android:inputType="numberDecimal"
+            android:text="@{transaction.amountString}" />
+
+        <Spinner
+            android:id="@+id/oldTransactionCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/oldTransactionAmount"
+            android:layout_margin="@dimen/form_margin_body" />
+
+        <Button
+            android:id="@+id/oldTransactionSaveBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/button_margin"
+            android:layout_marginEnd="@dimen/button_side_margin"
+            android:text="@string/btn_save" />
+
+    </RelativeLayout>
+</layout>

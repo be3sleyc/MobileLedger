@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="transaction"
+            type="info.chorimeb.mobileLedger.data.db.entities.Transaction" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/transactionRecycleItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/transactionAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="@dimen/cardview_horizontal_margin"
+                android:layout_toStartOf="@id/transactionAmount"
+                android:text="@{transaction.accountname}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="@tools:sample/lorem"/>
+
+            <TextView
+                android:id="@+id/transactionAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/cardview_horizontal_margin"
+                android:text="@{transaction.amountString}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="@tools:sample/us_zipcodes"/>
+
+            <TextView
+                android:id="@+id/newTransactionDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/transactionAccount"
+                android:layout_marginStart="@dimen/cardview_horizontal_margin"
+                android:text="@{transaction.paiddateString}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="@tools:sample/date/mmddyy"/>
+
+            <TextView
+                android:id="@+id/transactionCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/transactionAmount"
+                android:layout_alignBottom="@id/newTransactionDate"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="@dimen/cardview_horizontal_margin"
+                android:text="@{transaction.category}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                tools:text="@tools:sample/lorem"/>
+
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

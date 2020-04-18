@@ -3,7 +3,7 @@ package info.chorimeb.mobileLedger.data.db.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import info.chorimeb.mobileLedger.util.convertToNewFormat
+import info.chorimeb.mobileLedger.util.convertFromUTCFormat
 import kotlinx.android.parcel.Parcelize
 import java.text.NumberFormat
 
@@ -23,6 +23,6 @@ data class Transaction(
         return NumberFormat.getCurrencyInstance().format(amount ?: 0.0)
     }
     fun getPaiddateString(): String? {
-        return convertToNewFormat(this.paiddate)
+        return convertFromUTCFormat(this.paiddate)
     }
 }

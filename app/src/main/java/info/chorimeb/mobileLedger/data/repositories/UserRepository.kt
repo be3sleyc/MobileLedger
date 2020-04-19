@@ -8,7 +8,12 @@ import info.chorimeb.mobileLedger.data.network.requests.LoginRequest
 import info.chorimeb.mobileLedger.data.network.requests.RegisterRequest
 import info.chorimeb.mobileLedger.data.network.responses.AuthResponse
 
-class UserRepository(private val api: ApiService, private val db: AppDatabase) : SafeApiRequest() {
+class UserRepository(
+    private val api: ApiService,
+    private val db: AppDatabase,
+    private val accountRepository: AccountRepository,
+    private val transactionRepository: TransactionRepository
+) : SafeApiRequest() {
 
     suspend fun login(email: String, password: String): AuthResponse {
         return apiRequest { api.loginUser(LoginRequest(email, password)) }
@@ -30,6 +35,11 @@ class UserRepository(private val api: ApiService, private val db: AppDatabase) :
                 )
             )
         }
+    }
+
+    suspend fun loadProfile(token: String) {
+        accountRepository.loadAccounts(token)
+        transactionRepository.loadTransactions(token)
     }
 
     suspend fun logout(token: String): AuthResponse {

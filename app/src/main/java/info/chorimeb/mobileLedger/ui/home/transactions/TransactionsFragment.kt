@@ -10,13 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.OnItemClickListener
 import com.xwray.groupie.ViewHolder
 import info.chorimeb.mobileLedger.R
 import info.chorimeb.mobileLedger.data.db.entities.Transaction
 import info.chorimeb.mobileLedger.ui.account.AccountActivity
-import info.chorimeb.mobileLedger.ui.auth.AuthListener
 import info.chorimeb.mobileLedger.ui.auth.LoginActivity
+import info.chorimeb.mobileLedger.ui.home.HomeListener
 import info.chorimeb.mobileLedger.ui.transaction.TransactionActivity
 import info.chorimeb.mobileLedger.util.Coroutines
 import info.chorimeb.mobileLedger.util.TopSpacingItemDecoration
@@ -28,7 +27,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 
-class TransactionsFragment : Fragment(), AuthListener, KodeinAware {
+class TransactionsFragment : Fragment(), HomeListener, KodeinAware {
 
     override val kodein by kodein()
 
@@ -52,54 +51,59 @@ class TransactionsFragment : Fragment(), AuthListener, KodeinAware {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         viewModel = ViewModelProvider(this, factory).get(TransactionsViewModel::class.java)
-        viewModel.authListener = this
+        viewModel.homeListener = this
 
-        val fabOpen = AnimationUtils.loadAnimation(this.context, R.anim.fab_add_menu)
-        val fabClose = AnimationUtils.loadAnimation(this.context, R.anim.fab_close_menu)
-        val fabRotCW = AnimationUtils.loadAnimation(this.context, R.anim.rotate_clockwise)
-        val fabRotCCW = AnimationUtils.loadAnimation(this.context, R.anim.rotate_counterclockwise)
-
-        floatingActionButton.setOnClickListener {
-            isFabOpen = if (isFabOpen) {
-                fabaddaccount.startAnimation(fabClose)
-                fabaddtransaction.startAnimation(fabClose)
-                floatingActionButton.startAnimation(fabRotCW)
-                false
-            } else {
-                fabaddaccount.startAnimation(fabOpen)
-                fabaddtransaction.startAnimation(fabOpen)
-                floatingActionButton.startAnimation(fabRotCCW)
-                fabaddaccount.isClickable
-                fabaddtransaction.isClickable
-                true
-            }
-
-            fabaddtransaction.setOnClickListener {
-                fabaddaccount.startAnimation(fabClose)
-                fabaddtransaction.startAnimation(fabClose)
-                floatingActionButton.startAnimation(fabRotCW)
-                val intent = Intent(this.context, TransactionActivity::class.java)
-                intent.putExtra("TYPE", "new")
-                startActivity(intent)
-            }
-
-            fabaddaccount.setOnClickListener {
-                fabaddaccount.startAnimation(fabClose)
-                fabaddtransaction.startAnimation(fabClose)
-                floatingActionButton.startAnimation(fabRotCW)
-                val intent = Intent(this.context, AccountActivity::class.java)
-                intent.putExtra("TYPE", "new")
-                startActivity(intent)
-            }
-        }
-
-        progressbarTransactions.show()
         viewModel.getLoggedInUser().observe(viewLifecycleOwner, Observer { user ->
             if (user != null) {
-                val token = user.token!!
+
+                val fabOpen = AnimationUtils.loadAnimation(this.context, R.anim.fab_add_menu)
+                val fabClose = AnimationUtils.loadAnimation(this.context, R.anim.fab_close_menu)
+                val fabRotCW = AnimationUtils.loadAnimation(this.context, R.anim.rotate_clockwise)
+                val fabRotCCW =
+                    AnimationUtils.loadAnimation(this.context, R.anim.rotate_counterclockwise)
+
+                floatingActionButton.setOnClickListener {
+                    isFabOpen = if (isFabOpen) {
+                        fabaddaccount.startAnimation(fabClose)
+                        fabaddtransaction.startAnimation(fabClose)
+                        floatingActionButton.startAnimation(fabRotCW)
+                        false
+                    } else {
+                        fabaddaccount.startAnimation(fabOpen)
+                        fabaddtransaction.startAnimation(fabOpen)
+                        floatingActionButton.startAnimation(fabRotCCW)
+                        fabaddaccount.isClickable
+                        fabaddtransaction.isClickable
+                        true
+                    }
+
+                    fabaddtransaction.setOnClickListener {
+                        fabaddaccount.startAnimation(fabClose)
+                        fabaddtransaction.startAnimation(fabClose)
+                        floatingActionButton.startAnimation(fabRotCW)
+                        val intent = Intent(this.context, TransactionActivity::class.java)
+                        intent.putExtra("TYPE", "new")
+                        intent.putExtra("USER", user)
+                        startActivity(intent)
+                    }
+
+                    fabaddaccount.setOnClickListener {
+                        fabaddaccount.startAnimation(fabClose)
+                        fabaddtransaction.startAnimation(fabClose)
+                        floatingActionButton.startAnimation(fabRotCW)
+                        val intent = Intent(this.context, AccountActivity::class.java)
+                        intent.putExtra("TYPE", "new")
+                        intent.putExtra("USER", user)
+                        startActivity(intent)
+                    }
+                }
+
+                progressbarTransactions.show()
+
                 Coroutines.main {
-                    viewModel.getTransactionList(token).observe(viewLifecycleOwner, Observer {
+                    viewModel.getTransactionList().observe(viewLifecycleOwner, Observer {
                         if (it != null) {
                             bindUI(it)
                         }
@@ -107,6 +111,7 @@ class TransactionsFragment : Fragment(), AuthListener, KodeinAware {
                 }
             }
         })
+
     }
 
     private fun bindUI(transactionList: List<Transaction>) {
@@ -116,7 +121,13 @@ class TransactionsFragment : Fragment(), AuthListener, KodeinAware {
 
     private fun initRecyclerView(transactionItems: List<TransactionItem>) {
         val rAdapter = GroupAdapter<ViewHolder>().apply {
-            setOnItemClickListener(onItemClick)
+            setOnItemClickListener { item, _ ->
+                val transactionItem = item as TransactionItem
+                val intent = Intent(context, TransactionActivity::class.java)
+                intent.putExtra("TYPE", "old")
+                intent.putExtra("TRANSACTION", transactionItem.transaction)
+                startActivity(intent)
+            }
             addAll(transactionItems)
         }
 
@@ -124,6 +135,7 @@ class TransactionsFragment : Fragment(), AuthListener, KodeinAware {
             setHasFixedSize(true)
             val topSpacingItemDecoration = TopSpacingItemDecoration(20)
             addItemDecoration(topSpacingItemDecoration)
+            layoutManager = LinearLayoutManager(this.context)
             adapter = rAdapter
         }
     }
@@ -132,14 +144,6 @@ class TransactionsFragment : Fragment(), AuthListener, KodeinAware {
         return this.map {
             TransactionItem(it)
         }
-    }
-
-    private val onItemClick = OnItemClickListener { item, _ ->
-        val transactionItem = item as TransactionItem
-        val intent = Intent(this.context, TransactionActivity::class.java)
-        intent.putExtra("TYPE", "old")
-        intent.putExtra("TRANSACTION", transactionItem.transaction)
-        startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

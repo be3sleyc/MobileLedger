@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.transaction.EditTransactionFragment">
+<layout xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -10,81 +8,102 @@
             type="info.chorimeb.mobileLedger.data.db.entities.Transaction" />
     </data>
 
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.account.EditTransactionFragment">
 
         <Spinner
-            android:id="@+id/oldAccountNameSpinner"
+            android:id="@+id/editAccountNameSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_margin="@dimen/form_margin_title" />
+            android:layout_margin="@dimen/form_margin_title"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
         <EditText
-            android:id="@+id/oldTransactionDate"
+            android:id="@+id/editTransactionDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/oldAccountNameSpinner"
+            android:layout_below="@id/editAccountNameSpinner"
             android:layout_margin="@dimen/form_margin_body"
             android:ems="10"
             android:hint="@string/hint_datetime"
             android:importantForAutofill="no"
             android:inputType="datetime"
-            android:text="@{transaction.paiddateString}" />
+            android:text="@{transaction.paiddateString}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         <EditText
-            android:id="@+id/oldTransactionPayee"
+            android:id="@+id/editTransactionPayee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/oldTransactionDate"
+            android:layout_below="@id/editTransactionDate"
             android:layout_margin="@dimen/form_margin_body"
             android:ems="10"
             android:hint="@string/hint_payee"
             android:importantForAutofill="no"
             android:inputType="text"
-            android:text="@{transaction.payee}" />
+            android:text="@{transaction.payee}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         <EditText
-            android:id="@+id/oldTransactionDesc"
+            android:id="@+id/editTransactionDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/oldTransactionPayee"
+            android:layout_below="@id/editTransactionPayee"
             android:layout_margin="@dimen/form_margin_body"
             android:ems="10"
             android:hint="@string/hint_description"
             android:importantForAutofill="no"
             android:inputType="textShortMessage"
-            android:text="@{transaction.description}" />
+            android:text="@{transaction.description}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         <EditText
-            android:id="@+id/oldTransactionAmount"
+            android:id="@+id/editTransactionAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/oldTransactionDesc"
+            android:layout_below="@id/editTransactionDesc"
             android:layout_margin="@dimen/form_margin_body"
             android:ems="10"
             android:hint="@string/hint_balance_amount"
             android:importantForAutofill="no"
             android:inputType="numberDecimal"
-            android:text="@{transaction.amountString}" />
+            android:text="@{transaction.amountString}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         <Spinner
-            android:id="@+id/oldTransactionCategory"
+            android:id="@+id/editTransactionCategorySpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/oldTransactionAmount"
-            android:layout_margin="@dimen/form_margin_body" />
+            android:layout_below="@id/editTransactionAmount"
+            android:layout_margin="@dimen/form_margin_body"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+        <EditText
+            android:id="@+id/editTransactionCustomCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTransactionCategorySpinner"
+            android:layout_margin="@dimen/form_margin_body"
+            android:ems="10"
+            android:hint="@string/hint_other_category"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:visibility="gone" />
 
         <Button
-            android:id="@+id/oldTransactionSaveBtn"
+            android:id="@+id/btnEditTransactionSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/button_margin"
             android:layout_marginEnd="@dimen/button_side_margin"
-            android:text="@string/btn_save" />
+            android:layout_marginBottom="@dimen/button_margin"
+            android:text="@string/btn_save"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Button" />
 
     </RelativeLayout>
 </layout>

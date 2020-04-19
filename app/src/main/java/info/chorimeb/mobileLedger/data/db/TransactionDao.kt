@@ -19,10 +19,7 @@ interface TransactionDao {
     @Query("select * from `Transaction` where id=:id")
     fun fetchTransaction(id: Int): LiveData<Transaction>
 
-    @Query("select distinct accountname from `Transaction`")
-    fun fetchAccountNames(): LiveData<List<String>>
-
-    @Query("select distinct category from `Transaction`")
+    @Query("select distinct category from `Transaction` order by category")
     fun fetchCategories(): LiveData<List<String>>
 
     @Query("delete from `Transaction` where id > 0")

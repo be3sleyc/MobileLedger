@@ -1,69 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
-
+<layout>
     <data>
-
         <variable
             name="account"
             type="info.chorimeb.mobileLedger.data.db.entities.Account" />
     </data>
 
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.account.EditAccountFragment">
 
         <EditText
-            android:id="@+id/oldAccountName"
+            android:id="@+id/editAccountName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:text="@{account.name}"
-            android:hint="@string/hint_account_name"
-            android:inputType="textPersonName"
-            android:importantForAutofill="no"
             android:layout_centerHorizontal="true"
-            android:layout_margin="@dimen/form_margin_title"/>
+            android:layout_marginStart="@dimen/form_margin_title"
+            android:layout_marginTop="@dimen/form_margin_title"
+            android:layout_marginEnd="@dimen/form_margin_title"
+            android:layout_marginBottom="@dimen/form_margin_title"
+            android:ems="10"
+            android:hint="@string/hint_account_name"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:text="@{account.name}"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
         <TextView
-            android:id="@+id/oldAccountBalance"
+            android:id="@+id/editAccountBalance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/oldAccountName"
+            android:layout_below="@id/editAccountName"
+            android:layout_marginStart="@dimen/form_margin_body"
+            android:layout_marginTop="@dimen/form_margin_body"
+            android:layout_marginEnd="@dimen/form_margin_body"
+            android:layout_marginBottom="@dimen/form_margin_body"
             android:ems="10"
             android:text="@{account.balanceString}"
-            android:layout_margin="@dimen/form_margin_body"/>
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         <Spinner
-            android:id="@+id/oldAccountTypeSpinner"
+            android:id="@+id/editAccountTypeSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/oldAccountBalance"
-            android:layout_margin="@dimen/form_margin_body"/>
+            android:layout_below="@id/editAccountBalance"
+            android:layout_margin="@dimen/form_margin_body"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         <EditText
-            android:id="@+id/oldAccountNotes"
+            android:id="@+id/editAccountCustomType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/oldAccountTypeSpinner"
+            android:layout_below="@id/editAccountTypeSpinner"
+            android:layout_margin="@dimen/form_margin_body"
             android:ems="10"
-            android:text="@{account.notes}"
-            android:hint="@string/hint_account_notes"
-            android:inputType="textMultiLine"
+            android:hint="@string/hint_other_type"
             android:importantForAutofill="no"
-            android:layout_margin="@dimen/form_margin_body"/>
+            android:inputType="text"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/editAccountNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editAccountCustomType"
+            android:layout_margin="@dimen/form_margin_body"
+            android:ems="20"
+            android:hint="@string/hint_account_notes"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:text="@{account.notes}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
         <Button
-            android:id="@+id/btnOldAccountSave"
+            android:id="@+id/btnEditAccountSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/button_margin"
             android:layout_marginEnd="@dimen/button_side_margin"
-            android:text="@string/btn_save" />
+            android:layout_marginBottom="@dimen/button_margin"
+            android:text="@string/btn_save"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Button" />
 
     </RelativeLayout>
 </layout>

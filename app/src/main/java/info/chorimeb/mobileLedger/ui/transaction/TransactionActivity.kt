@@ -22,22 +22,17 @@ class TransactionActivity : AppCompatActivity() {
             }
 
             if (intent.getStringExtra("TYPE") == "old") {
-                println("setting title")
                 supportActionBar?.title = "Edit Transaction"
                 // inflate edit transaction frag with intent extras as arguments
-                println("setting fragment")
                 val editTransaction = EditTransactionFragment()
-                println("inflating fragment")
                 editTransaction.arguments = intent.extras
                 supportFragmentManager.beginTransaction()
                     .add(R.id.transactionFragmentContainer, editTransaction).commit()
             } else {
-                println("setting title")
                 supportActionBar?.title = "New Transaction"
                 // inflate newTransactionFragment
-                println("setting fragment")
                 val newTransaction = NewTransactionFragment()
-                println("inflating fragment")
+                newTransaction.arguments = intent.extras
                 supportFragmentManager.beginTransaction()
                     .add(R.id.transactionFragmentContainer, newTransaction).commit()
             }

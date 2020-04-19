@@ -7,10 +7,6 @@ import info.chorimeb.mobileLedger.data.db.entities.Account
 import info.chorimeb.mobileLedger.data.network.ApiService
 import info.chorimeb.mobileLedger.data.network.SafeApiRequest
 import info.chorimeb.mobileLedger.util.Coroutines
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-
-private const val ONE_WEEK = 1
 
 class AccountRepository(private val api: ApiService, private val db: AppDatabase) :
     SafeApiRequest() {
@@ -23,18 +19,28 @@ class AccountRepository(private val api: ApiService, private val db: AppDatabase
         }
     }
 
-    suspend fun getAccounts(token: String): LiveData<List<Account>> {
-        return withContext(Dispatchers.IO) {
-            fetchAccounts(token)
-            db.getAccountDao().fetchAccounts()
-        }
-    }
+    suspend fun loadAccounts(token: String) = fetchAccounts(token)
+
+    fun getAccounts(): LiveData<List<Account>> = db.getAccountDao().fetchAccounts()
+
+    fun getTypes() = db.getAccountDao().fetchAccountTypes()
+
+//    suspend fun addAccount(
+//        token: String,
+//        name: String,
+//        type: String,
+//        balance: Double,
+//        notes: String
+//    ): Boolean {
+//        val res =  apiRequest { api.addAccount(token, NewAccountRequest(name, type, balance, notes)) }
+//        if(res.message == "" ) {
+//
+//        }
+//    }
 
     private suspend fun fetchAccounts(token: String) {
-        if (isFetchNeeded()) {
-            val response = apiRequest { api.getAllAccounts(token) }
-            accounts.postValue(response.accounts)
-        }
+        val response = apiRequest { api.getAllAccounts(token) }
+        accounts.postValue(response.accounts)
     }
 
     private fun saveAccounts(accounts: List<Account>) {
@@ -42,9 +48,4 @@ class AccountRepository(private val api: ApiService, private val db: AppDatabase
             db.getAccountDao().saveAllAccounts(accounts)
         }
     }
-
-    private fun isFetchNeeded(): Boolean {
-        return true
-    }
-
 }

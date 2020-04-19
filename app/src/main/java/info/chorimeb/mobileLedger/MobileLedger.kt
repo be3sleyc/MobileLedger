@@ -28,7 +28,7 @@ class MobileLedger : Application(), KodeinAware {
         bind() from singleton { NetworkConnInterceptor(instance()) }
         bind() from singleton { ApiService(instance()) }
         bind() from singleton { AppDatabase(instance()) }
-        bind() from singleton { UserRepository(instance(), instance()) }
+        bind() from singleton { UserRepository(instance(), instance(), instance(), instance()) }
         bind() from singleton { AccountRepository(instance(), instance()) }
         bind() from singleton { TransactionRepository(instance(), instance())}
 

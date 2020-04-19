@@ -19,7 +19,10 @@ interface AccountDao {
     @Query("select * from Account where id=:id")
     fun fetchAccount(id: Int): LiveData<Account>
 
-    @Query("select distinct type from Account")
+    @Query("select distinct name from Account order by name")
+    fun fetchAccountNames(): LiveData<List<String>>
+
+    @Query("select distinct type from Account order by type")
     fun fetchAccountTypes(): LiveData<List<String>>
 
     @Query("delete from Account where id > 0")

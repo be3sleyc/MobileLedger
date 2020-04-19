@@ -32,6 +32,7 @@ class AccountActivity : AppCompatActivity() {
                 supportActionBar?.title = "New Account"
                 // inflate new account fragment
                 val newAccount = NewAccountFragment()
+                newAccount.arguments = intent.extras
                 supportFragmentManager.beginTransaction()
                     .add(R.id.accountFragmentContainer, newAccount).commit()
             }

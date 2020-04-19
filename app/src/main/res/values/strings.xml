@@ -30,6 +30,11 @@
     <string name="hint_account_name">Account Name</string>
     <string name="hint_balance_amount">$0.00</string>
     <string name="hint_account_notes">Notes</string>
+    <string name="hint_description">description</string>
+    <string name="hint_payee">payee</string>
+    <string name="hint_datetime">datetime</string>
+    <string name="hint_other_category">Other Category…</string>
+    <string name="hint_other_type">Other Type…</string>
 
     <!--Autofill Hints-->
     <string name="AUTOFILL_HINT_EMAIL_ADDRESS">emailAddress</string>
@@ -45,10 +50,5 @@
     <string name="error_login">Bad login credentials</string>
     <string name="error_network">Cannot communicate with database</string>
     <string name="error_registration">Email already in user</string>
-    <string name="hint_description">description</string>
-    <string name="hint_payee">payee</string>
-    <string name="hint_datetime">datetime</string>
-
-    <string name="cash">cash</string>
 
 </resources>

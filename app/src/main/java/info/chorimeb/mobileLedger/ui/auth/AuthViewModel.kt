@@ -40,8 +40,9 @@ class AuthViewModel(private val repository: UserRepository) : ViewModel() {
                 val response = repository.login(email!!.trim(), password!!)
 
                 response.user?.let {
-                    authListener?.onSuccess(it)
                     repository.saveUser(it)
+                    repository.loadProfile(it.token!!)
+                    authListener?.onSuccess(it)
                     return@main
                 }
                 authListener?.onFailure(response.message!!)

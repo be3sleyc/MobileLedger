@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/oldAccountFragment"
     android:layout_width="match_parent"
@@ -12,12 +11,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_margin="@dimen/form_margin_title"
+        android:layout_marginStart="@dimen/form_margin_title"
+        android:layout_marginTop="@dimen/form_margin_title"
+        android:layout_marginEnd="@dimen/form_margin_title"
+        android:layout_marginBottom="@dimen/form_margin_title"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/hint_account_name"
         android:importantForAutofill="no"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
 
     <EditText
         android:id="@+id/newAccountBalance"
@@ -28,25 +32,41 @@
         android:ems="10"
         android:hint="@string/hint_balance_amount"
         android:importantForAutofill="no"
-        android:inputType="numberDecimal" />
+        android:inputType="numberDecimal"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
     <Spinner
         android:id="@+id/newAccountTypeSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/newAccountBalance"
-        android:layout_margin="@dimen/form_margin_body" />
+        android:layout_margin="@dimen/form_margin_body"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
     <EditText
-        android:id="@+id/newAccountNotes"
+        android:id="@+id/newAccountCustomType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/newAccountTypeSpinner"
         android:layout_margin="@dimen/form_margin_body"
         android:ems="10"
+        android:hint="@string/hint_other_type"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:visibility="gone" />
+
+    <EditText
+        android:id="@+id/newAccountNotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newAccountCustomType"
+        android:layout_margin="@dimen/form_margin_body"
+        android:ems="20"
         android:hint="@string/hint_account_notes"
         android:importantForAutofill="no"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
     <Button
         android:id="@+id/btnNewAccountSave"
@@ -54,8 +74,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/button_margin"
         android:layout_marginEnd="@dimen/button_side_margin"
-        android:text="@string/btn_save" />
+        android:layout_marginBottom="@dimen/button_margin"
+        android:text="@string/btn_save"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Button" />
 
 </RelativeLayout>

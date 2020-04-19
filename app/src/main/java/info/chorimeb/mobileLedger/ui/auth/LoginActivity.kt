@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity(), AuthListener, KodeinAware {
             }
         })
 
-        txtPassword.setOnEditorActionListener(){ _, actionId, _ ->
+        txtPassword.setOnEditorActionListener{ _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE ->
                     viewModel.onLoginClick(this.btnLogin)

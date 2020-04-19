@@ -7,10 +7,6 @@ import info.chorimeb.mobileLedger.data.db.entities.Transaction
 import info.chorimeb.mobileLedger.data.network.ApiService
 import info.chorimeb.mobileLedger.data.network.SafeApiRequest
 import info.chorimeb.mobileLedger.util.Coroutines
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-
-private const val ONE_WEEK = 1
 
 class TransactionRepository(private val api: ApiService, private val db: AppDatabase) :
     SafeApiRequest() {
@@ -23,27 +19,22 @@ class TransactionRepository(private val api: ApiService, private val db: AppData
         }
     }
 
-    suspend fun getTransactions(token: String): LiveData<List<Transaction>> {
-        return withContext(Dispatchers.IO) {
-            fetchTransactions(token)
-            db.getTransactionDao().fetchTransactions()
-        }
-    }
+    suspend fun loadTransactions(token: String) = fetchTransactions(token)
+
+    fun getTransactions(): LiveData<List<Transaction>> = db.getTransactionDao().fetchTransactions()
+
+    fun getAccountNames() = db.getAccountDao().fetchAccountNames()
+
+    fun getCategories() = db.getTransactionDao().fetchCategories()
 
     private suspend fun fetchTransactions(token: String) {
-        if (isFetchNeeded()) {
-            val response = apiRequest { api.getAllTransactions(token) }
-            transactions.postValue(response.transactions)
-        }
+        val response = apiRequest { api.getAllTransactions(token) }
+        transactions.postValue(response.transactions)
     }
 
     private fun saveTransactions(transactions: List<Transaction>) {
         Coroutines.io {
             db.getTransactionDao().saveAllTransactions(transactions)
         }
-    }
-
-    private fun isFetchNeeded(): Boolean {
-        return true
     }
 }

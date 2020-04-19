@@ -1,11 +1,11 @@
 package info.chorimeb.mobileLedger.ui.home.transactions
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import info.chorimeb.mobileLedger.data.db.entities.Transaction
 import info.chorimeb.mobileLedger.data.repositories.TransactionRepository
 import info.chorimeb.mobileLedger.data.repositories.UserRepository
-import info.chorimeb.mobileLedger.ui.home.HomeListener
 import info.chorimeb.mobileLedger.util.ApiException
 import info.chorimeb.mobileLedger.util.Coroutines
 import info.chorimeb.mobileLedger.util.NoInternetConnectionException
@@ -16,8 +16,6 @@ class TransactionsViewModel(
     private val repository: TransactionRepository
 ) : ViewModel() {
 
-    var homeListener: HomeListener? = null
-
     fun getLoggedInUser() = userRepository.getUser()
 
     suspend fun getTransactionList(): LiveData<List<Transaction>> {
@@ -25,19 +23,18 @@ class TransactionsViewModel(
         return transaction.await()
     }
 
-    fun logout(token: String) = Coroutines.main {
+    fun logout(token: String) = Coroutines.io {
         try {
             val response = userRepository.logout(token)
             response.message?.let {
-                homeListener?.onSuccess(it)
                 userRepository.deleteUser()
-                return@main
+                return@io
             }
-            homeListener?.onFailure(response.message!!)
+            println(response.message!!)
         } catch (e: ApiException) {
-            homeListener?.onFailure(e.message!!)
+            println(e.message!!)
         } catch (e: NoInternetConnectionException) {
-            homeListener?.onFailure(e.message!!)
+            println(e.message!!)
         }
     }
 }

@@ -40,7 +40,7 @@
                 tools:text="@tools:sample/us_zipcodes"/>
 
             <TextView
-                android:id="@+id/newTransactionDate"
+                android:id="@+id/transactionDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/transactionAccount"
@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/transactionAmount"
-                android:layout_alignBottom="@id/newTransactionDate"
+                android:layout_alignBottom="@id/transactionDate"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="@dimen/cardview_horizontal_margin"
                 android:text="@{transaction.category}"

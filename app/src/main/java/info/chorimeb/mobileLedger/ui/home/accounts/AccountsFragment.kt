@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,7 +15,6 @@ import info.chorimeb.mobileLedger.data.db.entities.Account
 import info.chorimeb.mobileLedger.data.db.entities.User
 import info.chorimeb.mobileLedger.ui.account.AccountActivity
 import info.chorimeb.mobileLedger.ui.auth.LoginActivity
-import info.chorimeb.mobileLedger.ui.home.HomeListener
 import info.chorimeb.mobileLedger.ui.transaction.TransactionActivity
 import info.chorimeb.mobileLedger.util.Coroutines
 import info.chorimeb.mobileLedger.util.TopSpacingItemDecoration
@@ -28,7 +26,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 
-class AccountsFragment : Fragment(), HomeListener, KodeinAware {
+class AccountsFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
 
@@ -53,7 +51,6 @@ class AccountsFragment : Fragment(), HomeListener, KodeinAware {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this, factory).get(AccountsViewModel::class.java)
-        viewModel.homeListener = this
 
         viewModel.getLoggedInUser().observe(viewLifecycleOwner, Observer { user ->
             if (user != null) {
@@ -168,18 +165,5 @@ class AccountsFragment : Fragment(), HomeListener, KodeinAware {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onStarted() {
-        progressbarAccounts.show()
-    }
-
-    override fun onSuccess(response: Any) {
-        progressbarAccounts.hide()
-    }
-
-    override fun onFailure(message: String) {
-        progressbarAccounts.hide()
-        Toast.makeText(this.context, message, Toast.LENGTH_LONG).show()
     }
 }

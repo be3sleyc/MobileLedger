@@ -98,8 +98,8 @@ interface ApiService {
 //        @Path("stop", encoded = false) stop: String
 //    ): Response<TransactionListResponse>
 
-    @GET("transactions/categorylist")
-    suspend fun getTransactionCategories(@Header("auth-token") token: String): Response<CategoryListResponse>
+//    @GET("transactions/categorylist")
+//    suspend fun getTransactionCategories(@Header("auth-token") token: String): Response<CategoryListResponse>
 
     @PUT("transactions/{id}/edit/")
     suspend fun editTransaction(

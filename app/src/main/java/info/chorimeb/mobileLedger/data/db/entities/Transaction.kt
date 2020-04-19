@@ -3,7 +3,8 @@ package info.chorimeb.mobileLedger.data.db.entities
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import info.chorimeb.mobileLedger.util.convertFromUTCFormat
+import info.chorimeb.mobileLedger.util.convertFromUTCFormatDate
+import info.chorimeb.mobileLedger.util.convertFromUTCFormatTime
 import kotlinx.android.parcel.Parcelize
 import java.text.NumberFormat
 
@@ -18,11 +19,16 @@ data class Transaction(
     var description: String? = null,
     var amount: Double? = null,
     var category: String? = null
-): Parcelable {
+) : Parcelable {
     fun getAmountString(): String {
         return NumberFormat.getCurrencyInstance().format(amount ?: 0.0)
     }
+
     fun getPaiddateString(): String? {
-        return convertFromUTCFormat(this.paiddate)
+        return convertFromUTCFormatDate(this.paiddate)
+    }
+
+    fun getPaidtimeString(): String? {
+        return convertFromUTCFormatTime(this.paiddate)
     }
 }

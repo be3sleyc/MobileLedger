@@ -1,25 +1,25 @@
 package info.chorimeb.mobileLedger.ui.account
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import info.chorimeb.mobileLedger.R
 import info.chorimeb.mobileLedger.data.db.entities.User
+import info.chorimeb.mobileLedger.ui.home.HomeActivity
 import kotlinx.android.synthetic.main.fragment_new_account.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 
-class NewAccountFragment() : Fragment(), AccountListener, KodeinAware {
+class NewAccountFragment : Fragment(), AccountListener, KodeinAware {
 
     override val kodein: Kodein by kodein()
 
@@ -77,14 +77,33 @@ class NewAccountFragment() : Fragment(), AccountListener, KodeinAware {
                     }
                 }
         })
+
+        btnNewAccountSave.setOnClickListener {
+            val name = newAccountName.text.toString()
+            if (name.isBlank()) {
+                onFailure(getString(R.string.error_blank_account_name))
+                return@setOnClickListener
+            }
+            val type = if (newAccountTypeSpinner.selectedItem.toString() == "other") {
+                if (newAccountCustomType.text.toString().isBlank()) ""
+                else newAccountCustomType.text.toString()
+            } else newAccountTypeSpinner.selectedItem.toString()
+            val balance = newAccountBalance.text.toString()
+            val notes = newAccountNotes.text.toString()
+            viewModel.onSaveNew(it, user.token!!, name, type, balance, notes)
+        }
     }
 
     override fun onStarted() {
-        TODO("Not yet implemented")
+
     }
 
     override fun onSuccess(response: Any) {
-        TODO("Not yet implemented")
+        Toast.makeText(context, response as String, Toast.LENGTH_LONG).show()
+        Intent(this.context, HomeActivity::class.java).also {
+            it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(it)
+        }
     }
 
     override fun onFailure(message: String) {

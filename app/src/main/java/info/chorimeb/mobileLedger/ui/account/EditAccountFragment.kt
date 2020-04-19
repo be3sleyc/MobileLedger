@@ -1,14 +1,13 @@
 package info.chorimeb.mobileLedger.ui.account
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +15,7 @@ import info.chorimeb.mobileLedger.R
 import info.chorimeb.mobileLedger.data.db.entities.Account
 import info.chorimeb.mobileLedger.data.db.entities.User
 import info.chorimeb.mobileLedger.databinding.FragmentEditAccountBinding
+import info.chorimeb.mobileLedger.ui.home.HomeActivity
 import kotlinx.android.synthetic.main.fragment_edit_account.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -90,17 +90,30 @@ class EditAccountFragment : Fragment(), AccountListener, KodeinAware {
                 }
         })
 
+        btnEditAccountSave.setOnClickListener {
+            val name = editAccountName.text.toString()
+            val type =
+                if (editAccountTypeSpinner.selectedItem.toString() == "other") {
+                    if (editAccountCustomType.text.toString().isBlank()) ""
+                    else editAccountCustomType.text.toString()
+                } else editAccountTypeSpinner.selectedItem.toString()
+            val notes = editAccountNotes.text.toString()
+            viewModel.onSaveEdit(it, user.token!!, account.id!!, name, type, notes)
+        }
+
     }
 
     override fun onStarted() {
-        TODO("Not yet implemented")
     }
 
     override fun onSuccess(response: Any) {
-        TODO("Not yet implemented")
-    }
+        Toast.makeText(activity, response as String, Toast.LENGTH_LONG).show()
+        Intent(this.context, HomeActivity::class.java).also {
+            it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(it)
+        }    }
 
     override fun onFailure(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 }

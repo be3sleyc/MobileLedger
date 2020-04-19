@@ -28,11 +28,25 @@
             android:layout_below="@id/editAccountNameSpinner"
             android:layout_margin="@dimen/form_margin_body"
             android:ems="10"
-            android:hint="@string/hint_datetime"
+            android:hint="@string/hint_date"
             android:importantForAutofill="no"
-            android:inputType="datetime"
+            android:inputType="date"
             android:text="@{transaction.paiddateString}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+        <EditText
+            android:id="@+id/EditTransactionTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/editTransactionDate"
+            android:layout_below="@id/editAccountNameSpinner"
+            android:layout_margin="@dimen/form_margin_body"
+            android:ems="5"
+            android:hint="@string/hint_time"
+            android:importantForAutofill="no"
+            android:inputType="time"
+            android:text="@{transaction.paidtimeString}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
 
         <EditText
             android:id="@+id/editTransactionPayee"

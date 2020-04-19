@@ -42,6 +42,13 @@ class UserRepository(
         transactionRepository.loadTransactions(token)
     }
 
+    suspend fun reloadProfile(token: String) {
+        db.getAccountDao().deleteAccounts()
+        accountRepository.loadAccounts(token)
+        db.getTransactionDao().deleteTransactions()
+        transactionRepository.loadTransactions(token)
+    }
+
     suspend fun logout(token: String): AuthResponse {
         return apiRequest { api.logoutUser(token) }
     }

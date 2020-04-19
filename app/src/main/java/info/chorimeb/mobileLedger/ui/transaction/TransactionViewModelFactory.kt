@@ -6,14 +6,14 @@ import info.chorimeb.mobileLedger.data.repositories.TransactionRepository
 import info.chorimeb.mobileLedger.data.repositories.UserRepository
 
 class TransactionViewModelFactory(
-    private val userRepository: UserRepository,
-    private val repository: TransactionRepository
+    private val repository: TransactionRepository,
+    private val userRepository: UserRepository
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TransactionViewModel::class.java)) {
-            return TransactionViewModel(userRepository, repository) as T
+            return TransactionViewModel(repository, userRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -6,6 +6,9 @@ import info.chorimeb.mobileLedger.data.db.AppDatabase
 import info.chorimeb.mobileLedger.data.db.entities.Account
 import info.chorimeb.mobileLedger.data.network.ApiService
 import info.chorimeb.mobileLedger.data.network.SafeApiRequest
+import info.chorimeb.mobileLedger.data.network.requests.EditAccountRequest
+import info.chorimeb.mobileLedger.data.network.requests.NewAccountRequest
+import info.chorimeb.mobileLedger.data.network.responses.AccountResponse
 import info.chorimeb.mobileLedger.util.Coroutines
 
 class AccountRepository(private val api: ApiService, private val db: AppDatabase) :
@@ -25,18 +28,25 @@ class AccountRepository(private val api: ApiService, private val db: AppDatabase
 
     fun getTypes() = db.getAccountDao().fetchAccountTypes()
 
-//    suspend fun addAccount(
-//        token: String,
-//        name: String,
-//        type: String,
-//        balance: Double,
-//        notes: String
-//    ): Boolean {
-//        val res =  apiRequest { api.addAccount(token, NewAccountRequest(name, type, balance, notes)) }
-//        if(res.message == "" ) {
-//
-//        }
-//    }
+    suspend fun editAccount(
+        token: String,
+        id: Int,
+        name: String,
+        type: String,
+        notes: String
+    ): AccountResponse {
+        return apiRequest { api.editAccount(token, id, EditAccountRequest(name, type, notes)) }
+    }
+
+    suspend fun newAccount(
+        token: String,
+        name: String,
+        type: String,
+        balance: String,
+        notes: String
+    ): AccountResponse {
+        return apiRequest { api.addAccount(token, NewAccountRequest(name, type, balance, notes)) }
+    }
 
     private suspend fun fetchAccounts(token: String) {
         val response = apiRequest { api.getAllAccounts(token) }

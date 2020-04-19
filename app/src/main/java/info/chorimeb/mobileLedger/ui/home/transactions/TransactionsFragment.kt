@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,19 +14,16 @@ import info.chorimeb.mobileLedger.R
 import info.chorimeb.mobileLedger.data.db.entities.Transaction
 import info.chorimeb.mobileLedger.ui.account.AccountActivity
 import info.chorimeb.mobileLedger.ui.auth.LoginActivity
-import info.chorimeb.mobileLedger.ui.home.HomeListener
 import info.chorimeb.mobileLedger.ui.transaction.TransactionActivity
 import info.chorimeb.mobileLedger.util.Coroutines
 import info.chorimeb.mobileLedger.util.TopSpacingItemDecoration
-import info.chorimeb.mobileLedger.util.hide
-import info.chorimeb.mobileLedger.util.show
 import kotlinx.android.synthetic.main.component_fab.*
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 
-class TransactionsFragment : Fragment(), HomeListener, KodeinAware {
+class TransactionsFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
 
@@ -53,7 +49,6 @@ class TransactionsFragment : Fragment(), HomeListener, KodeinAware {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this, factory).get(TransactionsViewModel::class.java)
-        viewModel.homeListener = this
 
         viewModel.getLoggedInUser().observe(viewLifecycleOwner, Observer { user ->
             if (user != null) {
@@ -100,8 +95,6 @@ class TransactionsFragment : Fragment(), HomeListener, KodeinAware {
                     }
                 }
 
-                progressbarTransactions.show()
-
                 Coroutines.main {
                     viewModel.getTransactionList().observe(viewLifecycleOwner, Observer {
                         if (it != null) {
@@ -115,7 +108,6 @@ class TransactionsFragment : Fragment(), HomeListener, KodeinAware {
     }
 
     private fun bindUI(transactionList: List<Transaction>) {
-        progressbarTransactions.hide()
         initRecyclerView(transactionList.toTransactionItem())
     }
 
@@ -168,18 +160,5 @@ class TransactionsFragment : Fragment(), HomeListener, KodeinAware {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onStarted() {
-        progressbarTransactions.show()
-    }
-
-    override fun onSuccess(response: Any) {
-        progressbarTransactions.hide()
-    }
-
-    override fun onFailure(message: String) {
-        progressbarTransactions.hide()
-        Toast.makeText(this.context, message, Toast.LENGTH_LONG).show()
     }
 }

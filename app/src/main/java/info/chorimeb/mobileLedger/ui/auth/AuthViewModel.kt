@@ -4,6 +4,7 @@ import android.content.Intent
 import android.util.Patterns
 import android.view.View
 import androidx.lifecycle.ViewModel
+import info.chorimeb.mobileLedger.R
 import info.chorimeb.mobileLedger.data.repositories.UserRepository
 import info.chorimeb.mobileLedger.util.ApiException
 import info.chorimeb.mobileLedger.util.Coroutines
@@ -27,11 +28,11 @@ class AuthViewModel(private val repository: UserRepository) : ViewModel() {
 
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             // error
-            authListener?.onFailure("Bad Email or Password")
+            authListener?.onFailure(view.context.getString(R.string.error_login))
             return
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email!!).matches()) {
             // error
-            authListener?.onFailure("Bad Email")
+            authListener?.onFailure(view.context.getString(R.string.error_email))
             return
         }
 
@@ -65,35 +66,38 @@ class AuthViewModel(private val repository: UserRepository) : ViewModel() {
 
         if (firstName.isNullOrBlank()) {
             // error
-            authListener?.onFailure("First name is required")
+            authListener?.onFailure(view.context.getString(R.string.error_blank_firstname))
             return
         }
         if (lastName.isNullOrBlank()) {
             // error
-            authListener?.onFailure("Last name is required")
+            authListener?.onFailure(view.context.getString(R.string.error_blank_lastname))
             return
         }
         if (newEmail.isNullOrEmpty()) {
             // error
-            authListener?.onFailure("A valid email is required")
+            authListener?.onFailure(view.context.getString(R.string.error_email))
             return
         } else if (!Patterns.EMAIL_ADDRESS.matcher(newEmail!!).matches()) {
             // error
-            authListener?.onFailure("A Vaalid email is required")
+            authListener?.onFailure(view.context.getString(R.string.error_email))
             return
         }
         if (newPassword.isNullOrBlank()) {
             // error
-            authListener?.onFailure("Bad password")
+            authListener?.onFailure(view.context.getString(R.string.error_password))
+            return
+        } else if (newPassword!!.length < 8) {
+            authListener?.onFailure(view.context.getString(R.string.error_newPassword))
             return
         }
 
-        Coroutines.main {
+        Coroutines.io {
             try {
                 val response = repository.register(firstName!!, lastName!!, newEmail!!, newPassword!!)
                 response.message?.let {
                     authListener?.onSuccess(it)
-                    return@main
+                    return@io
                 }
                 authListener?.onFailure(response.message!!)
             } catch (e: ApiException) {

@@ -3,9 +3,7 @@ package info.chorimeb.mobileLedger.ui.transaction
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -19,8 +17,8 @@ import info.chorimeb.mobileLedger.data.db.entities.Transaction
 import info.chorimeb.mobileLedger.data.db.entities.User
 import info.chorimeb.mobileLedger.databinding.FragmentEditTransactionBinding
 import info.chorimeb.mobileLedger.ui.home.HomeActivity
+import info.chorimeb.mobileLedger.util.showDeleteTransactionDialog
 import kotlinx.android.synthetic.main.fragment_edit_transaction.*
-import kotlinx.android.synthetic.main.fragment_edit_transaction.editTransactionCategorySpinner
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
@@ -41,7 +39,6 @@ class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware {
         super.onAttach(context)
         arguments?.getParcelable<Transaction>("TRANSACTION")?.let {
             transaction = it
-            println("Transaction: $transaction")
         }
         arguments?.getParcelable<User>("USER")?.let {
             user = it
@@ -52,6 +49,7 @@ class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         val binding: FragmentEditTransactionBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_edit_transaction, container, false)
         binding.transaction = transaction
@@ -128,10 +126,33 @@ class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware {
                 paydate,
                 paytime,
                 payee,
-                amount,
                 description,
+                amount,
                 category
             )
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.app_bar_menu, menu)
+        menu.findItem(R.id.action_edit_account).isVisible = false
+        menu.findItem(R.id.action_add_account).isVisible = false
+        menu.findItem(R.id.action_logout).isVisible = false
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_delete -> {
+                showDeleteTransactionDialog(
+                    requireContext(),
+                    transaction.id!!,
+                    user.token!!,
+                    viewModel
+                )
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

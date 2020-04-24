@@ -3,12 +3,12 @@ package info.chorimeb.mobileLedger.ui.account
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.*
+import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import info.chorimeb.mobileLedger.R
@@ -16,6 +16,7 @@ import info.chorimeb.mobileLedger.data.db.entities.Account
 import info.chorimeb.mobileLedger.data.db.entities.User
 import info.chorimeb.mobileLedger.databinding.FragmentEditAccountBinding
 import info.chorimeb.mobileLedger.ui.home.HomeActivity
+import info.chorimeb.mobileLedger.util.showDeleteAccountDialog
 import kotlinx.android.synthetic.main.fragment_edit_account.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -27,6 +28,8 @@ class EditAccountFragment : Fragment(), AccountListener, KodeinAware {
     override val kodein: Kodein by kodein()
 
     private val factory: AccountViewModelFactory by instance<AccountViewModelFactory>()
+
+    private lateinit var viewModel: AccountViewModel
 
     private lateinit var account: Account
     private lateinit var user: User
@@ -45,6 +48,7 @@ class EditAccountFragment : Fragment(), AccountListener, KodeinAware {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         val binding: FragmentEditAccountBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_edit_account, container, false)
         binding.account = account
@@ -53,7 +57,7 @@ class EditAccountFragment : Fragment(), AccountListener, KodeinAware {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProvider(this, factory).get(AccountViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(AccountViewModel::class.java)
 
         viewModel.accountListener = this
 
@@ -103,6 +107,24 @@ class EditAccountFragment : Fragment(), AccountListener, KodeinAware {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.app_bar_menu, menu)
+        menu.findItem(R.id.action_edit_account).isVisible = false
+        menu.findItem(R.id.action_add_account).isVisible = false
+        menu.findItem(R.id.action_logout).isVisible = false
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_delete -> {
+                showDeleteAccountDialog(requireContext(), account.id!!, user.token!!, viewModel)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onStarted() {
     }
 
@@ -111,7 +133,8 @@ class EditAccountFragment : Fragment(), AccountListener, KodeinAware {
         Intent(this.context, HomeActivity::class.java).also {
             it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(it)
-        }    }
+        }
+    }
 
     override fun onFailure(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()

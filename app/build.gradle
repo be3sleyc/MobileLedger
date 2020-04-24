@@ -85,4 +85,8 @@ dependencies {
     implementation 'com.xwray:groupie-databinding:2.3.0'
 
     implementation "androidx.preference:preference-ktx:1.1.1"
+
+    // material dialog
+    implementation 'com.afollestad.material-dialogs:core:3.3.0'
+    implementation 'com.afollestad.material-dialogs:input:3.3.0'
 }

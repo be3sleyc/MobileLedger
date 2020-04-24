@@ -1,7 +1,7 @@
 package info.chorimeb.mobileLedger.ui.transaction
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
 import info.chorimeb.mobileLedger.R
 import kotlinx.android.synthetic.main.activity_transaction.*
@@ -21,7 +21,7 @@ class TransactionActivity : AppCompatActivity() {
                 return
             }
 
-            if (intent.getStringExtra("TYPE") == "old") {
+            if (intent.getStringExtra("TYPE") == "edit") {
                 supportActionBar?.title = "Edit Transaction"
                 // inflate edit transaction frag with intent extras as arguments
                 val editTransaction = EditTransactionFragment()

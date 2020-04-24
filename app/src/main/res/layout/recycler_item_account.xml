@@ -12,7 +12,9 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="@dimen/cardview_elevation">
+        android:elevation="@dimen/cardview_elevation"
+        android:paddingStart="@dimen/cardview_horizontal_margin"
+        android:paddingEnd="@dimen/cardview_horizontal_margin">
 
         <RelativeLayout
             android:id="@+id/accountRecycleItem"
@@ -38,7 +40,7 @@
                 android:layout_toEndOf="@id/accountTypeIcon"
                 android:text="@{account.name}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                tools:text="@tools:sample/lorem"/>
+                tools:text="@tools:sample/lorem" />
 
             <TextView
                 android:id="@+id/accountBalanceString"
@@ -49,7 +51,7 @@
                 android:layout_marginEnd="@dimen/cardview_horizontal_margin"
                 android:text="@{account.balanceString}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                tools:text="@tools:sample/us_zipcodes"/>
+                tools:text="@tools:sample/us_zipcodes" />
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

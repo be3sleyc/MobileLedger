@@ -26,6 +26,7 @@ class AccountsViewModel(
         try {
             val response = userRepository.logout(token)
             response.message?.let {
+                println(it)
                 userRepository.deleteUser()
                 return@io
             }

@@ -3,7 +3,6 @@ package info.chorimeb.mobileLedger.ui.home.accounts
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -34,8 +33,6 @@ class AccountsFragment : Fragment(), KodeinAware {
 
     private lateinit var viewModel: AccountsViewModel
 
-    private var isFabOpen = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
@@ -55,46 +52,11 @@ class AccountsFragment : Fragment(), KodeinAware {
         viewModel.getLoggedInUser().observe(viewLifecycleOwner, Observer { user ->
             if (user != null) {
 
-                val fabOpen = AnimationUtils.loadAnimation(this.context, R.anim.fab_add_menu)
-                val fabClose = AnimationUtils.loadAnimation(this.context, R.anim.fab_close_menu)
-                val fabRotCW = AnimationUtils.loadAnimation(this.context, R.anim.rotate_clockwise)
-                val fabRotCCW =
-                    AnimationUtils.loadAnimation(this.context, R.anim.rotate_counterclockwise)
-
                 floatingActionButton.setOnClickListener {
-                    isFabOpen = if (isFabOpen) {
-                        fabaddaccount.startAnimation(fabClose)
-                        fabaddtransaction.startAnimation(fabClose)
-                        floatingActionButton.startAnimation(fabRotCW)
-                        false
-                    } else {
-                        fabaddaccount.startAnimation(fabOpen)
-                        fabaddtransaction.startAnimation(fabOpen)
-                        floatingActionButton.startAnimation(fabRotCCW)
-                        fabaddaccount.isClickable
-                        fabaddtransaction.isClickable
-                        true
-                    }
-
-                    fabaddtransaction.setOnClickListener {
-                        fabaddaccount.startAnimation(fabClose)
-                        fabaddtransaction.startAnimation(fabClose)
-                        floatingActionButton.startAnimation(fabRotCW)
-                        val intent = Intent(this.context, TransactionActivity::class.java)
-                        intent.putExtra("TYPE", "new")
-                        intent.putExtra("USER", user)
-                        startActivity(intent)
-                    }
-
-                    fabaddaccount.setOnClickListener {
-                        fabaddaccount.startAnimation(fabClose)
-                        fabaddtransaction.startAnimation(fabClose)
-                        floatingActionButton.startAnimation(fabRotCW)
-                        val intent = Intent(this.context, AccountActivity::class.java)
-                        intent.putExtra("TYPE", "new")
-                        intent.putExtra("USER", user)
-                        startActivity(intent)
-                    }
+                    val intent = Intent(this.context, TransactionActivity::class.java)
+                    intent.putExtra("TYPE", "new")
+                    intent.putExtra("USER", user)
+                    startActivity(intent)
                 }
 
                 progressbarAccounts.show()
@@ -118,11 +80,13 @@ class AccountsFragment : Fragment(), KodeinAware {
     private fun initRecyclerView(user: User, accountItems: List<AccountItem>) {
         val rAdapter = GroupAdapter<ViewHolder>().apply {
             setOnItemClickListener { item, _ ->
+                progressbarAccounts.visibility = View.VISIBLE
                 val accountItem = item as AccountItem
                 val intent = Intent(context, AccountActivity::class.java)
-                intent.putExtra("TYPE", "old")
+                intent.putExtra("TYPE", "view")
                 intent.putExtra("ACCOUNT", accountItem.account)
                 intent.putExtra("USER", user)
+                progressbarAccounts.visibility = View.GONE
                 startActivity(intent)
             }
             addAll(accountItems)
@@ -145,11 +109,24 @@ class AccountsFragment : Fragment(), KodeinAware {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.app_bar_menu, menu)
+        menu.findItem(R.id.action_delete).isVisible = false
+        menu.findItem(R.id.action_edit_account).isVisible = false
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_add_account -> {
+                viewModel.getLoggedInUser().observe(viewLifecycleOwner, Observer { user ->
+                    if (user != null) {
+                        val intent = Intent(this.context, AccountActivity::class.java)
+                        intent.putExtra("TYPE", "new")
+                        intent.putExtra("USER", user)
+                        startActivity(intent)
+                    }
+                })
+                true
+            }
             R.id.action_logout -> {
                 viewModel.getLoggedInUser().observe(viewLifecycleOwner, Observer { user ->
                     if (user != null) {

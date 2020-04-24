@@ -33,17 +33,18 @@ class TransactionRepository(private val api: ApiService, private val db: AppData
         token: String,
         id: Int,
         accountid: Int,
-        amount: String,
         paiddate: String,
         payee: String,
         description: String,
+        amount: String,
         category: String
     ): TransactionResponse {
         return apiRequest {
+            println("id $id, accountid $accountid, paiddate $paiddate, payee $payee, description $description, amount $amount, category $category")
             api.editTransaction(
                 token,
                 id,
-                TransactionRequest(accountid, amount, paiddate, payee, description, category)
+                TransactionRequest(accountid, paiddate, payee, description, amount, category)
             )
         }
     }
@@ -64,6 +65,11 @@ class TransactionRepository(private val api: ApiService, private val db: AppData
             )
         }
     }
+
+    suspend fun deleteTransaction(token: String, id: Int): TransactionResponse {
+        return apiRequest { api.deleteTransaction(token, id) }
+    }
+
 
     private suspend fun fetchTransactions(token: String) {
         val response = apiRequest { api.getAllTransactions(token) }

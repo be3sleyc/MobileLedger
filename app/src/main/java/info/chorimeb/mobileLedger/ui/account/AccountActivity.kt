@@ -1,7 +1,7 @@
 package info.chorimeb.mobileLedger.ui.account
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
 import info.chorimeb.mobileLedger.R
 import kotlinx.android.synthetic.main.activity_account.*
@@ -21,9 +21,16 @@ class AccountActivity : AppCompatActivity() {
                 return
             }
 
-            if (intent.getStringExtra("TYPE") == "old") {
+            if (intent.getStringExtra("TYPE") == "view") {
+                supportActionBar?.title = "Account"
+                // inflate view account frag with intent extras
+                val viewAccount = AccountViewFragment()
+                viewAccount.arguments = intent.extras
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.accountFragmentContainer, viewAccount).commit()
+            } else if (intent.getStringExtra("TYPE") == "edit") {
                 supportActionBar?.title = "Edit Account"
-                // inflate edit account frag with intent extras
+                // inflate view account frag with intent extras
                 val editAccount = EditAccountFragment()
                 editAccount.arguments = intent.extras
                 supportFragmentManager.beginTransaction()

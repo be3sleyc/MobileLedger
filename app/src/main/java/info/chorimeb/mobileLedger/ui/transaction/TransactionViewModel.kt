@@ -38,10 +38,10 @@ class TransactionViewModel(
                         token,
                         id,
                         accountid,
-                        amount,
                         "$paydate $paytime",
                         payee,
                         description,
+                        amount.replace("$", ""),
                         category
                     )
                     response.message?.let {
@@ -79,6 +79,8 @@ class TransactionViewModel(
                         token, accountid,
                         amount, "$paydate $paytime", payee, description, category
                     )
+                    println(response.message)
+                    println(response.transaction)
                     response.message?.let {
                         Coroutines.io {
                             userRepository.reloadProfile(token)
@@ -93,6 +95,26 @@ class TransactionViewModel(
                     transactionListener?.onFailure(e.message!!)
                 }
             }
+        }
+    }
+
+    fun deleteTransaction(token: String?, id: Int?) = Coroutines.main {
+        try {
+            if (token != null && id != null) {
+                val response = repository.deleteTransaction(token, id)
+                response.message?.let {
+                    Coroutines.io {
+                        userRepository.reloadProfile(token)
+                    }
+                    transactionListener?.onSuccess(it)
+                    return@main
+                }
+                transactionListener?.onFailure(response.message!!)
+            }
+        } catch (e: ApiException) {
+            transactionListener?.onFailure(e.message!!)
+        } catch (e: NoInternetConnectionException) {
+            transactionListener?.onFailure(e.message!!)
         }
     }
 }

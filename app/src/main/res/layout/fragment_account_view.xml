@@ -1,0 +1,124 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="account"
+            type="info.chorimeb.mobileLedger.data.db.entities.Account" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="info.chorimeb.mobileLedger.ui.account.AccountViewFragment">
+
+        <RelativeLayout
+            android:id="@+id/accountDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/viewAccountName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="@dimen/form_margin_title"
+                android:layout_marginTop="@dimen/form_margin_title"
+                android:layout_marginEnd="@dimen/form_margin_title"
+                android:layout_marginBottom="@dimen/form_margin_title"
+                android:ems="10"
+                android:text="@{account.name}"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+
+            <TextView
+                android:id="@+id/viewAccountBalance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/viewAccountName"
+                android:layout_marginStart="@dimen/form_margin_body"
+                android:layout_marginTop="@dimen/form_margin_body"
+                android:layout_marginEnd="@dimen/form_margin_body"
+                android:layout_marginBottom="@dimen/form_margin_body"
+                android:ems="10"
+                android:text="@{account.balanceString}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+            <TextView
+                android:id="@+id/viewAccountType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/viewAccountBalance"
+                android:layout_margin="@dimen/form_margin_body"
+                android:text="@{account.type}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+            <TextView
+                android:id="@+id/viewAccountNotes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/viewAccountType"
+                android:layout_margin="@dimen/form_margin_body"
+                android:ems="20"
+                android:text="@{account.notes}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/space"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_height"
+            android:layout_below="@id/accountDetail"
+            android:alpha="1"
+            android:background="@color/colorPrimary" />
+
+        <FrameLayout
+            android:id="@+id/accountTransactions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/space"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/accountTransactionsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/recycler_item_transaction" />
+
+            <ProgressBar
+                android:id="@+id/progressbarAccountTransactions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/blankAccountTransactions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/blank_account_transactions"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                android:visibility="gone" />
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floatingTransactionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:backgroundTint="@color/colorAccent"
+                android:clickable="true"
+                android:elevation="@dimen/elevate"
+                android:src="@drawable/ic_add" />
+        </FrameLayout>
+
+
+    </RelativeLayout>
+</layout>

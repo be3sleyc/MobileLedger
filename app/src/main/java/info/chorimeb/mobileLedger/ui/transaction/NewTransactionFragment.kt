@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import info.chorimeb.mobileLedger.R
+import info.chorimeb.mobileLedger.data.db.entities.Account
 import info.chorimeb.mobileLedger.data.db.entities.AccountName
 import info.chorimeb.mobileLedger.data.db.entities.User
 import info.chorimeb.mobileLedger.ui.home.HomeActivity
@@ -33,11 +34,15 @@ class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware {
     private lateinit var viewModel: TransactionViewModel
 
     private lateinit var user: User
+    private lateinit var account: AccountName
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         arguments?.getParcelable<User>("USER")?.let {
             user = it
+        }
+        arguments?.getParcelable<Account>("ACCOUNT")?.let {
+            account = AccountName(it.id!!, it.name!!)
         }
     }
 
@@ -45,6 +50,7 @@ class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_new_transaction, container, false)
     }
 
@@ -63,6 +69,9 @@ class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware {
                     ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, names)
                 nameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 newAccountNameSpinner.adapter = nameAdapter
+                if (::account.isInitialized) {
+                    newAccountNameSpinner.setSelection(names.indexOf(account))
+                }
             }
         })
         viewModel.getCategories().observe(viewLifecycleOwner, Observer { categories ->
@@ -97,7 +106,7 @@ class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware {
         })
 
         btnNewTransactionSave.setOnClickListener {
-            val account: AccountName  = newAccountNameSpinner.selectedItem as AccountName
+            val account: AccountName = newAccountNameSpinner.selectedItem as AccountName
             val accountid: Int = account.id
             val paydate = newTransactionDate.text.toString()
             val paytime = newTransactionTime.text.toString()

@@ -83,7 +83,7 @@
             android:ems="10"
             android:hint="@string/hint_balance_amount"
             android:importantForAutofill="no"
-            android:inputType="numberDecimal"
+            android:inputType="numberDecimal|numberSigned"
             android:text="@{transaction.amountString}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 

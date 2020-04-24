@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import info.chorimeb.mobileLedger.data.db.AppDatabase
 import info.chorimeb.mobileLedger.data.db.entities.Account
+import info.chorimeb.mobileLedger.data.db.entities.Transaction
 import info.chorimeb.mobileLedger.data.network.ApiService
 import info.chorimeb.mobileLedger.data.network.SafeApiRequest
 import info.chorimeb.mobileLedger.data.network.requests.EditAccountRequest
@@ -26,6 +27,9 @@ class AccountRepository(private val api: ApiService, private val db: AppDatabase
 
     fun getAccounts(): LiveData<List<Account>> = db.getAccountDao().fetchAccounts()
 
+    fun getTransactions(accountname: String): LiveData<List<Transaction>> =
+        db.getTransactionDao().fetchAccountTransaction(accountname)
+
     fun getTypes() = db.getAccountDao().fetchAccountTypes()
 
     suspend fun editAccount(
@@ -46,6 +50,10 @@ class AccountRepository(private val api: ApiService, private val db: AppDatabase
         notes: String
     ): AccountResponse {
         return apiRequest { api.addAccount(token, NewAccountRequest(name, type, balance, notes)) }
+    }
+
+    suspend fun deleteAccount(token: String, id: Int): AccountResponse {
+        return apiRequest { api.closeAccount(token, id) }
     }
 
     private suspend fun fetchAccounts(token: String) {

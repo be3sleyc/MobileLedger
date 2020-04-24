@@ -33,6 +33,12 @@ interface ApiService {
         @Body editAccountReq: EditAccountRequest
     ): Response<AccountResponse>
 
+    @PUT("accounts/{id}/close")
+    suspend fun closeAccount(
+        @Header("auth-token") token: String,
+        @Path("id", encoded = false) id: Int
+    ): Response<AccountResponse>
+
     @POST("accounts/add")
     suspend fun addAccount(
         @Header("auth-token") token: String,
@@ -106,6 +112,12 @@ interface ApiService {
         @Header("auth-token") token: String,
         @Path("id", encoded = false) id: Int,
         @Body editTransactionReq: TransactionRequest
+    ): Response<TransactionResponse>
+
+    @PUT("transactions/{id}/delete")
+    suspend fun deleteTransaction(
+        @Header("auth-token") token: String,
+        @Path("id", encoded = false) id: Int
     ): Response<TransactionResponse>
 
     @POST("transactions/log")

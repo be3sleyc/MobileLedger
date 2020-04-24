@@ -1,6 +1,5 @@
 package info.chorimeb.mobileLedger.ui.home.transactions
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import info.chorimeb.mobileLedger.data.db.entities.Transaction
@@ -27,6 +26,7 @@ class TransactionsViewModel(
         try {
             val response = userRepository.logout(token)
             response.message?.let {
+                println(it)
                 userRepository.deleteUser()
                 return@io
             }

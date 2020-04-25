@@ -1,4 +1,4 @@
-package info.chorimeb.mobileLedger.util
+package info.chorimeb.mobileLedger.ui.dialog
 
 import android.content.Context
 import android.widget.TextView

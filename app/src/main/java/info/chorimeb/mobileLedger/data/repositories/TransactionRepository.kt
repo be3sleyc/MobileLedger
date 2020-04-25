@@ -61,7 +61,7 @@ class TransactionRepository(private val api: ApiService, private val db: AppData
         return apiRequest {
             api.addTransaction(
                 token,
-                TransactionRequest(accountid, amount, paiddate, payee, description, category)
+                TransactionRequest(accountid, paiddate, payee, description, amount, category)
             )
         }
     }

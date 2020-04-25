@@ -1,11 +1,13 @@
 package info.chorimeb.mobileLedger.ui.transaction
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -16,15 +18,17 @@ import info.chorimeb.mobileLedger.data.db.entities.AccountName
 import info.chorimeb.mobileLedger.data.db.entities.Transaction
 import info.chorimeb.mobileLedger.data.db.entities.User
 import info.chorimeb.mobileLedger.databinding.FragmentEditTransactionBinding
+import info.chorimeb.mobileLedger.ui.dialog.showDeleteTransactionDialog
 import info.chorimeb.mobileLedger.ui.home.HomeActivity
-import info.chorimeb.mobileLedger.util.showDeleteTransactionDialog
 import kotlinx.android.synthetic.main.fragment_edit_transaction.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
+import java.util.*
 
-class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware {
+class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware,
+    DatePickerDialog.OnDateSetListener {
 
     override val kodein: Kodein by kodein()
 
@@ -73,6 +77,18 @@ class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware {
                 editAccountNameSpinner.setSelection(editAccountName)
             }
         })
+
+        editTransactionDate.setOnClickListener {
+            val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                this,
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+            )
+            datePickerDialog.show()
+        }
+
         viewModel.getCategories().observe(viewLifecycleOwner, Observer { categories ->
             val transactionCategories = categories?.plus("other") ?: listOf("other")
             val editCategory = categories.indexOf(transaction.category)
@@ -170,5 +186,10 @@ class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware {
 
     override fun onFailure(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val date = requireContext().getString(R.string.pick_date, year, month + 1, dayOfMonth)
+        editTransactionDate.text = date
     }
 }

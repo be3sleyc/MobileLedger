@@ -1,14 +1,14 @@
 package info.chorimeb.mobileLedger.ui.transaction
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,8 +24,10 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
+import java.util.*
 
-class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware {
+class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware,
+    DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     override val kodein: Kodein by kodein()
 
@@ -60,8 +62,27 @@ class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware {
 
         viewModel.transactionListener = this
 
-        newTransactionDate.setText(getCurrentDateTime().toString("yyyy-MM-dd"))
-        newTransactionTime.setText(getCurrentDateTime().toString("HH:mm"))
+        newTransactionDate.setOnClickListener {
+            val datePickerDialog = DatePickerDialog(
+                requireContext(),
+                this,
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+            )
+            datePickerDialog.show()
+        }
+
+        newTransactionTime.setOnClickListener {
+            val timepickerDialog = TimePickerDialog(
+                requireContext(),
+                this,
+                Calendar.getInstance().get(Calendar.HOUR),
+                Calendar.getInstance().get(Calendar.MINUTE),
+                false
+            )
+            timepickerDialog.show()
+        }
 
         viewModel.getAccountNames().observe(viewLifecycleOwner, Observer { names ->
             if (names != null) {
@@ -108,8 +129,10 @@ class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware {
         btnNewTransactionSave.setOnClickListener {
             val account: AccountName = newAccountNameSpinner.selectedItem as AccountName
             val accountid: Int = account.id
-            val paydate = newTransactionDate.text.toString()
-            val paytime = newTransactionTime.text.toString()
+            val paydate = if (newTransactionDate.text.toString() == "")
+                getCurrentDateTime().toString("yyyy-MM-dd") else newTransactionDate.text.toString()
+            val paytime = if (newTransactionTime.text.toString() == "")
+                getCurrentDateTime().toString("HH:mm") else newTransactionTime.text.toString()
             val payee = newTransactionPayee.text.toString()
             val description = newTransactionDesc.text.toString()
             val amount = newTransactionAmount.text.toString()
@@ -145,5 +168,15 @@ class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware {
 
     override fun onFailure(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val date = requireContext().getString(R.string.pick_date, year, month + 1, dayOfMonth)
+        newTransactionDate.text = date
+    }
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        val time = requireContext().getString(R.string.pick_time, hourOfDay, minute)
+        newTransactionTime.text = time
     }
 }

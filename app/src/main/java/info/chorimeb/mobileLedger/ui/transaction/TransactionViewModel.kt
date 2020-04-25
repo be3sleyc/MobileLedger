@@ -8,6 +8,7 @@ import info.chorimeb.mobileLedger.data.repositories.UserRepository
 import info.chorimeb.mobileLedger.util.ApiException
 import info.chorimeb.mobileLedger.util.Coroutines
 import info.chorimeb.mobileLedger.util.NoInternetConnectionException
+import info.chorimeb.mobileLedger.util.convertToUTCFormat
 
 class TransactionViewModel(
     private val repository: TransactionRepository,
@@ -32,13 +33,14 @@ class TransactionViewModel(
         category: String
     ) {
         if (view.id == R.id.btnEditTransactionSave) {
+            println("UTC Format: ${convertToUTCFormat("$paydate $paytime")}")
             Coroutines.main {
                 try {
                     val response = repository.editTransaction(
                         token,
                         id,
                         accountid,
-                        "$paydate $paytime",
+                        convertToUTCFormat("$paydate $paytime")!!,
                         payee,
                         description,
                         amount.replace("$", ""),
@@ -73,14 +75,17 @@ class TransactionViewModel(
         category: String
     ) {
         if (view.id == R.id.btnNewTransactionSave) {
+            println("UTC Format: ${convertToUTCFormat("$paydate $paytime")}")
             Coroutines.main {
                 try {
                     val response = repository.newTransaction(
                         token, accountid,
-                        amount, "$paydate $paytime", payee, description, category
+                        amount,
+                        convertToUTCFormat("$paydate $paytime")!!,
+                        payee,
+                        description,
+                        category
                     )
-                    println(response.message)
-                    println(response.transaction)
                     response.message?.let {
                         Coroutines.io {
                             userRepository.reloadProfile(token)

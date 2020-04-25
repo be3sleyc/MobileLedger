@@ -15,8 +15,8 @@ import info.chorimeb.mobileLedger.R
 import info.chorimeb.mobileLedger.data.db.entities.Account
 import info.chorimeb.mobileLedger.data.db.entities.User
 import info.chorimeb.mobileLedger.databinding.FragmentEditAccountBinding
+import info.chorimeb.mobileLedger.ui.dialog.showDeleteAccountDialog
 import info.chorimeb.mobileLedger.ui.home.HomeActivity
-import info.chorimeb.mobileLedger.util.showDeleteAccountDialog
 import kotlinx.android.synthetic.main.fragment_edit_account.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -118,7 +118,12 @@ class EditAccountFragment : Fragment(), AccountListener, KodeinAware {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_delete -> {
-                showDeleteAccountDialog(requireContext(), account.id!!, user.token!!, viewModel)
+                showDeleteAccountDialog(
+                    requireContext(),
+                    account.id!!,
+                    user.token!!,
+                    viewModel
+                )
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -15,7 +15,8 @@ data class Account(
     var name: String? = null,
     var type: String? = null,
     var balance: Double? = null,
-    var notes: String? = null
+    var notes: String? = null,
+    var isdeleted: Int = 0
 ) : Parcelable {
 
     fun getBalanceString(): String {

@@ -15,6 +15,8 @@ import androidx.lifecycle.ViewModelProvider
 import info.chorimeb.mobileLedger.R
 import info.chorimeb.mobileLedger.data.db.entities.User
 import info.chorimeb.mobileLedger.ui.home.HomeActivity
+import info.chorimeb.mobileLedger.util.hide
+import info.chorimeb.mobileLedger.util.show
 import kotlinx.android.synthetic.main.fragment_new_account.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -82,6 +84,7 @@ class NewAccountFragment : Fragment(), AccountListener, KodeinAware {
         })
 
         btnNewAccountSave.setOnClickListener {
+            progressbarNewAccount.show()
             val name = newAccountName.text.toString()
             if (name.isBlank()) {
                 onFailure(getString(R.string.error_blank_account_name))
@@ -102,6 +105,7 @@ class NewAccountFragment : Fragment(), AccountListener, KodeinAware {
     }
 
     override fun onSuccess(response: Any) {
+        progressbarNewAccount.hide()
         Toast.makeText(context, response as String, Toast.LENGTH_LONG).show()
         Intent(this.context, HomeActivity::class.java).also {
             it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -110,6 +114,7 @@ class NewAccountFragment : Fragment(), AccountListener, KodeinAware {
     }
 
     override fun onFailure(message: String) {
+        progressbarNewAccount.hide()
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 }

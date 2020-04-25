@@ -17,6 +17,8 @@ import info.chorimeb.mobileLedger.data.db.entities.User
 import info.chorimeb.mobileLedger.databinding.FragmentEditAccountBinding
 import info.chorimeb.mobileLedger.ui.dialog.showDeleteAccountDialog
 import info.chorimeb.mobileLedger.ui.home.HomeActivity
+import info.chorimeb.mobileLedger.util.hide
+import info.chorimeb.mobileLedger.util.show
 import kotlinx.android.synthetic.main.fragment_edit_account.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -95,6 +97,7 @@ class EditAccountFragment : Fragment(), AccountListener, KodeinAware {
         })
 
         btnEditAccountSave.setOnClickListener {
+            progressbarEditAccount.show()
             val name = editAccountName.text.toString()
             val type =
                 if (editAccountTypeSpinner.selectedItem.toString() == "other") {
@@ -118,12 +121,14 @@ class EditAccountFragment : Fragment(), AccountListener, KodeinAware {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_delete -> {
+                progressbarEditAccount.show()
                 showDeleteAccountDialog(
                     requireContext(),
                     account.id!!,
                     user.token!!,
                     viewModel
                 )
+                progressbarEditAccount.hide()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -134,6 +139,7 @@ class EditAccountFragment : Fragment(), AccountListener, KodeinAware {
     }
 
     override fun onSuccess(response: Any) {
+        progressbarEditAccount.hide()
         Toast.makeText(activity, response as String, Toast.LENGTH_LONG).show()
         Intent(this.context, HomeActivity::class.java).also {
             it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -142,6 +148,7 @@ class EditAccountFragment : Fragment(), AccountListener, KodeinAware {
     }
 
     override fun onFailure(message: String) {
+        progressbarEditAccount.hide()
         Toast.makeText(activity, message, Toast.LENGTH_LONG).show()
     }
 }

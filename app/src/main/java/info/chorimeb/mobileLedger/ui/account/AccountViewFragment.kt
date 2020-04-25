@@ -63,6 +63,9 @@ class AccountViewFragment : Fragment(), AccountListener, KodeinAware {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        progressbarAccountTransactions.show()
+
         viewModel = ViewModelProvider(this, factory).get(AccountViewModel::class.java)
 
         viewModel.accountListener = this
@@ -75,7 +78,6 @@ class AccountViewFragment : Fragment(), AccountListener, KodeinAware {
             startActivity(intent)
         }
 
-        progressbarAccountTransactions.show()
         if (account.name != null) {
             Coroutines.main {
                 viewModel.getAccountTransactionList(account.name as String)
@@ -84,9 +86,9 @@ class AccountViewFragment : Fragment(), AccountListener, KodeinAware {
                             if (it.isNotEmpty()) {
                                 bindUI(it)
                             } else {
-                                progressbarAccountTransactions.hide()
                                 accountTransactionsRecycler.visibility = View.GONE
                                 blankAccountTransactions.visibility = View.VISIBLE
+                                progressbarAccountTransactions.hide()
                             }
                         }
                     })
@@ -110,7 +112,7 @@ class AccountViewFragment : Fragment(), AccountListener, KodeinAware {
             }
             addAll(transactionItems)
         }
-        progressbarAccountTransactions.hide()
+
         accountTransactionsRecycler.apply {
             setHasFixedSize(true)
             val topSpacingItemDecoration = TopSpacingItemDecoration(20)
@@ -118,6 +120,7 @@ class AccountViewFragment : Fragment(), AccountListener, KodeinAware {
             layoutManager = LinearLayoutManager(this.context)
             adapter = rAdapter
         }
+        progressbarAccountTransactions.hide()
     }
 
     private fun List<Transaction>.toTransactionItem(): List<TransactionItem> {

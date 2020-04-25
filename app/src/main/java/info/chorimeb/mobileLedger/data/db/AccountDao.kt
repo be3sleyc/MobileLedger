@@ -14,13 +14,13 @@ interface AccountDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveAllAccounts(accounts: List<Account>)
 
-    @Query("select * from Account")
+    @Query("select * from Account where isdeleted = 0")
     fun fetchAccounts(): LiveData<List<Account>>
 
     @Query("select * from Account where id=:id")
     fun fetchAccount(id: Int): LiveData<Account>
 
-    @Query("select id, name from Account order by name")
+    @Query("select id, name, isdeleted from Account order by isdeleted, name")
     fun fetchAccountNames(): LiveData<List<AccountName>>
 
     @Query("select distinct type from Account order by type")

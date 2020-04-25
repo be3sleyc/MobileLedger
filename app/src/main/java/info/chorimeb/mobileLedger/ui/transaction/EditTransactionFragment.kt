@@ -18,6 +18,8 @@ import info.chorimeb.mobileLedger.data.db.entities.User
 import info.chorimeb.mobileLedger.databinding.FragmentEditTransactionBinding
 import info.chorimeb.mobileLedger.ui.dialog.showDeleteTransactionDialog
 import info.chorimeb.mobileLedger.ui.home.HomeActivity
+import info.chorimeb.mobileLedger.util.hide
+import info.chorimeb.mobileLedger.util.show
 import kotlinx.android.synthetic.main.fragment_edit_transaction.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -132,6 +134,7 @@ class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware,
         })
 
         btnEditTransactionSave.setOnClickListener {
+            progressbarEditTransaction.show()
             val account = editAccountNameSpinner.selectedItem as AccountName
             val accountid = account.id
             val paydate = editTransactionDate.text.toString()
@@ -169,12 +172,14 @@ class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware,
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_delete -> {
+                progressbarEditTransaction.show()
                 showDeleteTransactionDialog(
                     requireContext(),
                     transaction.id!!,
                     user.token!!,
                     viewModel
                 )
+                progressbarEditTransaction.hide()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -186,6 +191,7 @@ class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware,
     }
 
     override fun onSuccess(response: Any) {
+        progressbarEditTransaction.hide()
         Toast.makeText(activity, response as String, Toast.LENGTH_LONG).show()
         Intent(this.context, HomeActivity::class.java).also {
             it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -194,6 +200,7 @@ class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware,
     }
 
     override fun onFailure(message: String) {
+        progressbarEditTransaction.hide()
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 

@@ -93,6 +93,13 @@
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
         android:visibility="gone" />
 
+    <ProgressBar
+        android:id="@+id/progressbarNewTransaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/btnNewTransactionSave"
         android:layout_width="wrap_content"

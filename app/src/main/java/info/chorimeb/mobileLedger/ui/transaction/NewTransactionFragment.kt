@@ -18,6 +18,8 @@ import info.chorimeb.mobileLedger.data.db.entities.AccountName
 import info.chorimeb.mobileLedger.data.db.entities.User
 import info.chorimeb.mobileLedger.ui.home.HomeActivity
 import info.chorimeb.mobileLedger.util.getCurrentDateTime
+import info.chorimeb.mobileLedger.util.hide
+import info.chorimeb.mobileLedger.util.show
 import info.chorimeb.mobileLedger.util.toString
 import kotlinx.android.synthetic.main.fragment_new_transaction.*
 import org.kodein.di.Kodein
@@ -44,7 +46,7 @@ class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware,
             user = it
         }
         arguments?.getParcelable<Account>("ACCOUNT")?.let {
-            account = AccountName(it.id!!, it.name!!)
+            account = AccountName(it.id!!, it.name!!, it.isdeleted)
         }
     }
 
@@ -127,6 +129,7 @@ class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware,
         })
 
         btnNewTransactionSave.setOnClickListener {
+            progressbarNewTransaction.show()
             val account: AccountName = newAccountNameSpinner.selectedItem as AccountName
             val accountid: Int = account.id
             val paydate = if (newTransactionDate.text.toString() == "")
@@ -159,6 +162,7 @@ class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware,
     }
 
     override fun onSuccess(response: Any) {
+        progressbarNewTransaction.hide()
         Toast.makeText(activity, response as String, Toast.LENGTH_LONG).show()
         Intent(this.context, HomeActivity::class.java).also {
             it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -167,6 +171,7 @@ class NewTransactionFragment : Fragment(), TransactionListener, KodeinAware,
     }
 
     override fun onFailure(message: String) {
+        progressbarNewTransaction.hide()
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 

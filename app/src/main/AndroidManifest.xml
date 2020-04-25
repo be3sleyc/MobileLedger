@@ -8,13 +8,15 @@
     <application
         android:name="info.chorimeb.mobileLedger.MobileLedger"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_coins"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_coins_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name="info.chorimeb.mobileLedger.ui.auth.LoginActivity">
+        <activity
+            android:name="info.chorimeb.mobileLedger.ui.auth.LoginActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,22 +25,27 @@
         </activity>
         <activity
             android:name="info.chorimeb.mobileLedger.ui.auth.RegisterActivity"
-            android:parentActivityName="info.chorimeb.mobileLedger.ui.auth.LoginActivity">
+            android:parentActivityName="info.chorimeb.mobileLedger.ui.auth.LoginActivity"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="info.chorimeb.mobileLedger.ui.auth.LoginActivity" />
         </activity>
-        <activity android:name="info.chorimeb.mobileLedger.ui.home.HomeActivity" />
+        <activity
+            android:name="info.chorimeb.mobileLedger.ui.home.HomeActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="info.chorimeb.mobileLedger.ui.transaction.TransactionActivity"
-            android:parentActivityName="info.chorimeb.mobileLedger.ui.home.HomeActivity">
+            android:parentActivityName="info.chorimeb.mobileLedger.ui.home.HomeActivity"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="info.chorimeb.mobileLedger.ui.home.HomeActivity" />
         </activity>
         <activity
             android:name="info.chorimeb.mobileLedger.ui.account.AccountActivity"
-            android:parentActivityName="info.chorimeb.mobileLedger.ui.home.HomeActivity">
+            android:parentActivityName="info.chorimeb.mobileLedger.ui.home.HomeActivity"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="info.chorimeb.mobileLedger.ui.home.HomeActivity" />

@@ -1,14 +1,12 @@
 package info.chorimeb.mobileLedger.ui.transaction
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.DatePicker
-import android.widget.Toast
+import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -28,7 +26,7 @@ import org.kodein.di.generic.instance
 import java.util.*
 
 class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware,
-    DatePickerDialog.OnDateSetListener {
+    DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     override val kodein: Kodein by kodein()
 
@@ -89,6 +87,17 @@ class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware,
             datePickerDialog.show()
         }
 
+        editTransactionTime.setOnClickListener {
+            val timepickerDialog = TimePickerDialog(
+                requireContext(),
+                this,
+                Calendar.getInstance().get(Calendar.HOUR),
+                Calendar.getInstance().get(Calendar.MINUTE),
+                false
+            )
+            timepickerDialog.show()
+        }
+
         viewModel.getCategories().observe(viewLifecycleOwner, Observer { categories ->
             val transactionCategories = categories?.plus("other") ?: listOf("other")
             val editCategory = categories.indexOf(transaction.category)
@@ -126,7 +135,7 @@ class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware,
             val account = editAccountNameSpinner.selectedItem as AccountName
             val accountid = account.id
             val paydate = editTransactionDate.text.toString()
-            val paytime = EditTransactionTime.text.toString()
+            val paytime = editTransactionTime.text.toString()
             val payee = editTransactionPayee.text.toString()
             val amount = editTransactionAmount.text.toString()
             val description = editTransactionDesc.text.toString()
@@ -191,5 +200,10 @@ class EditTransactionFragment : Fragment(), TransactionListener, KodeinAware,
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         val date = requireContext().getString(R.string.pick_date, year, month + 1, dayOfMonth)
         editTransactionDate.text = date
+    }
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        val time = requireContext().getString(R.string.pick_time, hourOfDay, minute)
+        editTransactionTime.text = time
     }
 }
